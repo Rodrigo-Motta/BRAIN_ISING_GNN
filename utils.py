@@ -29,15 +29,16 @@ def import_data(fisher):
         phenotypic = pd.read_csv(r'/Users/rodrigo/Post-Grad/CC400/phenotypic200.csv',index_col=['Institution','Subject'])
     return df,phenotypic
 
+
 def remove_triangle(df):
     # Remove triangle of a symmetric matrix and the diagonal
-    
+
     df = df.astype(float)
     df.values[np.triu_indices_from(df, k=1)] = np.nan
-    df  = ((df.T).values.reshape((1,(df.shape[0])**2)))
+    df = ((df.T).values.reshape((1, (df.shape[0]) ** 2)))
     df = df[~np.isnan(df)]
-    df = df[df!=1]
-    return (df).reshape((1,len(df)))
+    df = df[df != 1]
+    return (df).reshape((1, len(df)))
 
 
 def reconstruct_symmetric_matrix(size, upper_triangle_array, diag=1):
