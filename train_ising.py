@@ -98,7 +98,7 @@ def GCN_test(loader):
 print(torch.backends.mps.is_available()) #the MacOS is higher than 12.3+
 print(torch.backends.mps.is_built()) #MPS is activated
 
-X = np.loadtxt('simulation_corr_matrix.txt').reshape(1200,17955)
+X = np.loadtxt('simulation_corr_matrix.txt').ravel().reshape(1000,17955)
 Temps = np.loadtxt('simulation_corr_matrix.txt')
 
 X = np.array(X, dtype=np.float32)
