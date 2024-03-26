@@ -53,14 +53,14 @@ X_fmri = pd.concat([X_fmri_1, X_fmri_2])
 y = pd.concat([y_1, y_2])
 #
 
-A = ut.reconstruct_symmetric_matrix(190, X_fmri.iloc[:,:].mean(axis=0))
+A = ut.reconstruct_symmetric_matrix(333, X_fmri.iloc[:,:].mean(axis=0))
 train_data, val_data = ut.create_graph(X_fmri, X_fmri, y, y,method={'knn_group' : ut.compute_KNN_graph(A, 15)})#, method={'threshold': 0.8})
 train_loader, val_loader = ut.create_batch(train_data, val_data, batch_size=32)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Load model
-model = GCN(190, 3).to(device)
+model = GCN(333, 3).to(device)
 model.load_state_dict(torch.load('/Users/rodrigo/Post-Grad/Ising_GNN/model.pth'))
 model.eval()
 

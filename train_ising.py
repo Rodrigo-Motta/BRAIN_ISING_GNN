@@ -97,9 +97,9 @@ def GCN_test(loader):
 
 print(torch.backends.mps.is_available()) #the MacOS is higher than 12.3+
 print(torch.backends.mps.is_built()) #MPS is activated
-
-X = np.loadtxt('simulation_corr_matrix.txt').ravel().reshape(1000,17955)
-Temps = np.loadtxt('simulation_corr_matrix.txt')
+N = 333
+X = np.loadtxt('simulation_corr_matrix_333.txt').ravel().reshape(1000,int((N*N - N)/2))
+Temps = np.loadtxt('temps_333.txt')
 
 X = np.array(X, dtype=np.float32)
 Temps = np.array(Temps, dtype=np.float32)
@@ -109,7 +109,7 @@ from sklearn.model_selection import train_test_split
 # Split train and validation set
 X_train, X_test, y_train, y_test = train_test_split(pd.DataFrame(X),pd.DataFrame(Temps),test_size=0.15, shuffle=True, random_state=42)
 
-train_data, val_data = ut.create_graph(X_train, X_test, y_train, y_test,size=190, method={'knn' : 15})
+train_data, val_data = ut.create_graph(X_train, X_test, y_train, y_test,size=333, method={'knn' : 15})
 
 train_loader, val_loader = ut.create_batch(train_data, val_data, batch_size=64)
 
@@ -117,7 +117,7 @@ metrics = {"loss_train": [], "loss_test": [], "mae_test": [], "mae_train": []}
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # device = torch.device("mps")
-model = GCN(190, 3).to(device)
+model = GCN(333, 3).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-3)  # ,momentum=0.35)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10], gamma=.1, verbose=True)
 
@@ -149,13 +149,13 @@ for epoch in range(1, NUM_EPOCHS + 1):
 
 
 # Save the model parameters to a file
-torch.save(model.state_dict(), 'files/model_params.pth')
+torch.save(model.state_dict(), 'files/model_params_333.pth')
 
 # Create a DataFrame from the dictionary
 df = pd.DataFrame(metrics)
 
 # Save the DataFrame to a CSV file
-df.to_csv('files/model_eval.csv', index=False)
+df.to_csv('files/model_eval_333.csv', index=False)
 
 # Save predictions
 y_pred_aux = np.array([])
@@ -164,5 +164,5 @@ for y_i in val_loader:
     y_pred_aux = np.concatenate((y_pred_aux, (model(y_i))[1].detach().numpy().ravel()) )
     y_test_aux.append(y_i.y.numpy()[0])
 
-np.savetxt('y_pred_ising.txt', y_pred_aux.ravel())
-np.savetxt('y_test_ising.txt', np.array(y_test_aux).ravel())
+np.savetxt('y_pred_ising_333.txt', y_pred_aux.ravel())
+np.savetxt('y_test_ising_333.txt', np.array(y_test_aux).ravel())

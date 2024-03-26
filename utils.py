@@ -147,7 +147,7 @@ def create_graph(X_train, X_test, y_train, y_test, size=190 ,method={'knn' : 10}
         edge_index_A, edge_attr_A = dense_to_sparse(A)
         
         train_data.append(Data(x=Adj, edge_index=edge_index_A,edge_attr=edge_attr_A.reshape(len(edge_attr_A), 1),
-                               y=torch.tensor(int(y_train.iloc[i]))))
+                               y=torch.tensor(float(y_train.iloc[i]))))
 
           
     # Creating test data in pyG DATA structure
@@ -184,7 +184,7 @@ def create_graph(X_train, X_test, y_train, y_test, size=190 ,method={'knn' : 10}
         edge_index_A, edge_attr_A = dense_to_sparse(A)
 
         val_data.append(Data(x=Adj, edge_index=edge_index_A,edge_attr=edge_attr_A.reshape(len(edge_attr_A), 1),
-                             y=torch.tensor(int(y_test.iloc[i]))))
+                             y=torch.tensor(float(y_test.iloc[i]))))
 
     return train_data,val_data
 
@@ -229,7 +229,7 @@ def create_graph_time_series(X_train, X_test, y_train, y_test, Adj_train, Adj_te
         
         train_data.append(Data(x=torch.tensor(np.double(X_train.iloc[i,:].values).reshape(120,190),dtype=torch.double).reshape(190,120), edge_index=edge_index_A,
                                edge_attr=edge_attr_A.reshape(len(edge_attr_A), 1),
-                               y=torch.tensor(int(y_train.iloc[i]))))
+                               y=torch.tensor(float(y_train.iloc[i]))))
 
           
     # Creating test data in pyG DATA structure
@@ -267,7 +267,7 @@ def create_graph_time_series(X_train, X_test, y_train, y_test, Adj_train, Adj_te
 
         val_data.append(Data(x=torch.tensor(np.double(X_test.iloc[i,:].values).reshape(120,190)).reshape(190,120),
                              edge_index=edge_index_A,edge_attr=edge_attr_A.reshape(len(edge_attr_A), 1),
-                             y=torch.tensor(int(y_test.iloc[i]))))
+                             y=torch.tensor(float(y_test.iloc[i]))))
 
     return train_data,val_data
 

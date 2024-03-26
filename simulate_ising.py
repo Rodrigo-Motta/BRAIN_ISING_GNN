@@ -161,9 +161,9 @@ Temps = np.hstack((T_1,T_2)).ravel()
 # Simulating the models
 config = initial_state(n,"random")
 
-X = Matrix_X(Temps, config,iterations,J,n,23, adj_size=190)
+X = Matrix_X(Temps, config,iterations,J,n,17, adj_size=333) #23
 
 # Save the simulated models
-np.savetxt('simulation_corr_matrix.txt', X.ravel())
-np.savetxt('temps.txt', Temps.ravel())
+np.savetxt('simulation_corr_matrix_330.txt', X.ravel())
+np.savetxt('temps_330.txt', Temps.ravel())
 
