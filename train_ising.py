@@ -7,7 +7,6 @@ from sklearn.metrics import mean_absolute_error,mean_squared_error, r2_score
 from model import GCN
 import torch
 
-
 def TRAIN_LOSS(loader):
     model.eval()
     l1_weight = 0
@@ -53,13 +52,14 @@ def GCN_train(loader, loop):
         loss_with_penalty = loss_value + l1_penalty
         loss_with_penalty.backward()
         optimizer.step()
+        scheduler.step()
         loss_all += y.num_graphs * loss_with_penalty.item()
         pred.append(output)
         label.append(y.y)
 
         loop.set_description(f"Epoch [{epoch}/{NUM_EPOCHS}]")
         loop.set_postfix(loss=loss_all / len(train_data))
-        # optimizer.step()
+
     y_pred = torch.cat(pred, dim=0).cpu().detach().numpy()
     y_true = torch.cat(label, dim=0).cpu().detach().numpy()
     mae = mean_absolute_error(y_pred, y_true)
@@ -97,9 +97,14 @@ def GCN_test(loader):
 
 print(torch.backends.mps.is_available()) #the MacOS is higher than 12.3+
 print(torch.backends.mps.is_built()) #MPS is activated
-N = 333
-X = np.loadtxt('simulation_corr_matrix_333.txt').ravel().reshape(1000,int((N*N - N)/2))
-Temps = np.loadtxt('temps_333.txt')
+
+N = 333 #190
+num_simulations = 1500 #1000
+simulation_path = 'simulation_corr_matrix_333__250-13.txt' #'simulation_corr_matrix_333.txt'
+temp_path = 'temps_333__250-13.txt'
+
+X = np.loadtxt(simulation_path).ravel().reshape(num_simulations, int((N*N - N)/2))
+Temps = np.loadtxt(temp_path)
 
 X = np.array(X, dtype=np.float32)
 Temps = np.array(Temps, dtype=np.float32)
@@ -109,7 +114,7 @@ from sklearn.model_selection import train_test_split
 # Split train and validation set
 X_train, X_test, y_train, y_test = train_test_split(pd.DataFrame(X),pd.DataFrame(Temps),test_size=0.15, shuffle=True, random_state=42)
 
-train_data, val_data = ut.create_graph(X_train, X_test, y_train, y_test,size=333, method={'knn' : 15})
+train_data, val_data = ut.create_graph(X_train, X_test, y_train, y_test,size=N, method={'knn' : 15})
 
 train_loader, val_loader = ut.create_batch(train_data, val_data, batch_size=64)
 
@@ -117,9 +122,10 @@ metrics = {"loss_train": [], "loss_test": [], "mae_test": [], "mae_train": []}
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # device = torch.device("mps")
-model = GCN(333, 3).to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-3)  # ,momentum=0.35)
-scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10], gamma=.1, verbose=True)
+model = GCN(N, 3).to(device)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-3)  # ,momentum=0.35)
+#scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10], gamma=.1, verbose=True)
+scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=1e-4, max_lr=1e-3, cycle_momentum=False)
 
 for layer in model.children():
     if hasattr(layer, 'reset_parameters'):
@@ -129,7 +135,7 @@ for layer in model.children():
 
 min_v_loss = np.inf
 
-NUM_EPOCHS = 300
+NUM_EPOCHS = 100
 
 for epoch in range(1, NUM_EPOCHS + 1):
     loop = tqdm(train_loader)
@@ -147,9 +153,13 @@ for epoch in range(1, NUM_EPOCHS + 1):
     print('Val MAE {} , Val Loss {}'.format(test_mae, test_loss))
     print('Train MAE {} , Train Loss {}'.format(TRAIN_mae, TRAIN_loss))
 
+    if test_mae < .06:
+        break
+
 
 # Save the model parameters to a file
 torch.save(model.state_dict(), 'files/model_params_333.pth')
+
 
 # Create a DataFrame from the dictionary
 df = pd.DataFrame(metrics)
