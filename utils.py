@@ -40,7 +40,6 @@ def remove_triangle(df):
     df = df[df != 1]
     return (df).reshape((1, len(df)))
 
-
 def reconstruct_symmetric_matrix(size, upper_triangle_array, diag=1):
 
     result = np.zeros((size, size))
@@ -49,25 +48,41 @@ def reconstruct_symmetric_matrix(size, upper_triangle_array, diag=1):
     np.fill_diagonal(result, diag)
     return result
 
-def DMN_extraction(df):
-    '''
-    '''
-    ROI_labels_dmn = pd.read_csv('/Users/rodrigo/Post-Grad/CC400/ROI_labels_DMN - ROI_labels.csv.csv')
-    ROI_labels_dmn = ROI_labels_dmn.dropna()
-    ROI_labels = pd.read_csv('/Users/rodrigo/Post-Grad/CC400/ROI_labels.csv')
-    ROI_labels = ROI_labels[ROI_labels.TIME_COURSES == True]
-    ROI_labels['NEW_LABEL'] = np.arange(0,len(ROI_labels),1)
-    ROI_labels_dmn = ROI_labels.merge(
-        ROI_labels_dmn, left_on='ROI number', right_on='ROI number', how='inner')
-    roi_labels = ROI_labels_dmn['NEW_LABEL'].values# Adjust these labels as needed
-    arr_aux = np.zeros((len(df), int((len(ROI_labels_dmn)**2 - len(ROI_labels_dmn))/2) ))
-    for i in range(len(df)):
+# def DMN_extraction(df):
+#     '''
+#     '''
+#     ROI_labels_dmn = pd.read_csv('/Users/rodrigo/Post-Grad/CC400/ROI_labels_DMN - ROI_labels.csv.csv')
+#     ROI_labels_dmn = ROI_labels_dmn.dropna()
+#     ROI_labels = pd.read_csv('/Users/rodrigo/Post-Grad/CC400/ROI_labels.csv')
+#     ROI_labels = ROI_labels[ROI_labels.TIME_COURSES == True]
+#     ROI_labels['NEW_LABEL'] = np.arange(0,len(ROI_labels),1)
+#     ROI_labels_dmn = ROI_labels.merge(
+#         ROI_labels_dmn, left_on='ROI number', right_on='ROI number', how='inner')
+#     roi_labels = ROI_labels_dmn['NEW_LABEL'].values# Adjust these labels as needed
+#     arr_aux = np.zeros((len(df), int((len(ROI_labels_dmn)**2 - len(ROI_labels_dmn))/2) ))
+#     for i in range(len(df)):
+#         aux = (pd.DataFrame(
+#             reconstruct_symmetric_matrix(190,df.iloc[i].values))
+#                .loc[roi_labels,roi_labels])
+#         aux = remove_triangle(aux)
+#         arr_aux[i] = aux.ravel().reshape(1,-1)
+#     return arr_aux, ROI_labels_dmn['AAL_x']
+
+
+def DMN_extraction(X):
+    default = pd.read_excel(r'/Users/rodrigo/Post-Grad/BHRC/Parcels_Joao/Parcels.xlsx')
+    default = default[default.Community == 'Default']
+    arr_aux = np.zeros((len(X), int((len(default) ** 2 - len(default)) / 2)))
+    roi_labels = default['ParcelID'].values  # Adjust these labels as needed
+
+    for i in range(len(X)):
         aux = (pd.DataFrame(
-            reconstruct_symmetric_matrix(190,df.iloc[i].values))
-               .loc[roi_labels,roi_labels])
+            reconstruct_symmetric_matrix(333, X.iloc[i].values))
+        .loc[roi_labels, roi_labels])
         aux = remove_triangle(aux)
-        arr_aux[i] = aux.ravel().reshape(1,-1)
-    return arr_aux, ROI_labels_dmn['AAL_x']
+        arr_aux[i] = aux.ravel().reshape(1, -1)
+
+    return pd.DataFrame(arr_aux), default
 
 
 def compute_KNN_graph(matrix, k_degree=10):
@@ -270,13 +285,6 @@ def create_graph_time_series(X_train, X_test, y_train, y_test, Adj_train, Adj_te
                              y=torch.tensor(float(y_test.iloc[i]))))
 
     return train_data,val_data
-
-
-
-
-
-
-
 
 def create_batch(train_data, val_data, batch_size):
     

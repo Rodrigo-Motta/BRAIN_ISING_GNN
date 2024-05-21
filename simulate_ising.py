@@ -152,8 +152,8 @@ n = 250    # Lattice size
 iterations = ((n*n)*n)*30    # Iterations to thermal equilibrium
 
 # Temperatures
-T_1 = np.linspace(1.8,2.21,750)
-T_2 = np.linspace(2.21,2.4,750)
+T_1 = np.linspace(1.7,2.21,750)
+T_2 = np.linspace(2.21,2.6,750)
 Temps = np.hstack((T_1,T_2)).ravel()
 
 
