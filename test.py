@@ -31,9 +31,9 @@ df = pd.read_csv('/Users/rodrigo/Post-Grad/adhd_dataset_gordon.csv')
 N = 333
 
 # Health subjects
-df = df[df['DX'] == 0]
-df = df[df[' Max Rotation (degree)'] < 1]
-df = df[df['Max Motion (mm)'] < 1]
+#df = df[df['DX'] == 0]
+df = df[df[' Max Rotation (degree)'] < 3]
+df = df[df['Max Motion (mm)'] < 3]
 
 X_fmri = df.iloc[:,1:-37]
 
@@ -98,7 +98,7 @@ y = pd.DataFrame(y)
 y['y_pred'] = y_pred_aux_age
 y = y.dropna()
 
-plt.figure(dpi=120)
+plt.figure(figsize=(10,5), dpi=120)
 sns.regplot(data=y, x='Age', y='y_pred',color='black')
 
 correlation_value = np.corrcoef([y['Age'].values, y['y_pred'].values])[0,1]

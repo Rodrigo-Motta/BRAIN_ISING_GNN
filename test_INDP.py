@@ -28,34 +28,10 @@ X_fmri_1 = pd.DataFrame(df_1.drop(columns=['TOTAL_DAWBA','subject']).values) #ag
 y_1 =  pd.DataFrame((df_1['TOTAL_DAWBA'].drop(columns=['TOTAL_DAWBA','subject']))) #age_mri_wave
 
 # ---------------------------------------------------------------------------------------
-phenotypic = pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/phenotypic.csv')
-phenotypic = phenotypic.set_index('subject')
-
-df_2= pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/corr_matrices.csv')
-df_2 = df_2.set_index('subject')
-
-subjects = np.loadtxt('/Users/rodrigo/Post-Grad/BHRC/DadosRodrigo/CARAS12.txt').astype(int)
-df_2 = df_2.loc[subjects,:]
-
-phenotypic = phenotypic.loc[df_2.index, :]
-
-phenotypic = phenotypic[phenotypic.TOTAL_DAWBA != 0]
-
-df_2 = df_2[df_2.index.isin(phenotypic.index)]
-
-df_2['TOTAL_DAWBA'] = phenotypic['TOTAL_DAWBA']#/12#/phenotypic['TOTAL_DAWBA'].max()
-
-df_2 = df_2.reset_index()
-X_fmri_2 = pd.DataFrame(df_2.drop(columns=['TOTAL_DAWBA','subject']).values)
-y_2 =  pd.DataFrame((df_2['TOTAL_DAWBA'].drop(columns=['TOTAL_DAWBA','subject'])))
-
-
-# ----------------------------------------------------------------------------------------
-
 # phenotypic = pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/phenotypic.csv')
 # phenotypic = phenotypic.set_index('subject')
 #
-# df_2 = pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/corr_matrices_wave2.csv')
+# df_2= pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/corr_matrices.csv')
 # df_2 = df_2.set_index('subject')
 #
 # subjects = np.loadtxt('/Users/rodrigo/Post-Grad/BHRC/DadosRodrigo/CARAS12.txt').astype(int)
@@ -63,15 +39,39 @@ y_2 =  pd.DataFrame((df_2['TOTAL_DAWBA'].drop(columns=['TOTAL_DAWBA','subject'])
 #
 # phenotypic = phenotypic.loc[df_2.index, :]
 #
-# phenotypic = phenotypic[phenotypic.TOTAL_DAWBA == 0.0]
+# phenotypic = phenotypic[phenotypic.TOTAL_DAWBA != 0]
 #
 # df_2 = df_2[df_2.index.isin(phenotypic.index)]
 #
-# df_2['age_mri_wave2'] = phenotypic['age_mri_wave2']/12#/phenotypic['TOTAL_DAWBA'].max()
+# df_2['TOTAL_DAWBA'] = phenotypic['TOTAL_DAWBA']#/12#/phenotypic['TOTAL_DAWBA'].max()
 #
 # df_2 = df_2.reset_index()
-# X_fmri_2 = pd.DataFrame(df_2.drop(columns=['age_mri_wave2','subject']).values)
-# y_2 =  pd.DataFrame((df_2['age_mri_wave2'].drop(columns=['age_mri_wave2','subject'])))
+# X_fmri_2 = pd.DataFrame(df_2.drop(columns=['TOTAL_DAWBA','subject']).values)
+# y_2 =  pd.DataFrame((df_2['TOTAL_DAWBA'].drop(columns=['TOTAL_DAWBA','subject'])))
+
+
+# ----------------------------------------------------------------------------------------
+
+phenotypic = pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/phenotypic.csv')
+phenotypic = phenotypic.set_index('subject')
+
+df_2 = pd.read_csv('/Users/rodrigo/Post-Grad/BHRC/corr_matrices_wave2.csv')
+df_2 = df_2.set_index('subject')
+
+subjects = np.loadtxt('/Users/rodrigo/Post-Grad/BHRC/DadosRodrigo/CARAS12.txt').astype(int)
+df_2 = df_2.loc[subjects,:]
+
+phenotypic = phenotypic.loc[df_2.index, :]
+
+phenotypic = phenotypic[phenotypic.TOTAL_DAWBA == 0.0]
+
+df_2 = df_2[df_2.index.isin(phenotypic.index)]
+
+df_2['age_mri_wave2'] = phenotypic['age_mri_wave2']/12#/phenotypic['TOTAL_DAWBA'].max()
+
+df_2 = df_2.reset_index()
+X_fmri_2 = pd.DataFrame(df_2.drop(columns=['age_mri_wave2','subject']).values)
+y_2 =  pd.DataFrame((df_2['age_mri_wave2'].drop(columns=['age_mri_wave2','subject'])))
 
 ############################################################################
 
@@ -102,8 +102,8 @@ y = pd.DataFrame(y)
 y['y_pred'] = y_pred_aux_age
 y = y.dropna()
 
-# y_pred_aux_age_1 = np.array(y_pred_aux_age[:160])
-# y_pred_aux_age_2 = np.array(y_pred_aux_age[160:]) #309
-#
-# y_1 = np.array(y[:160])
-# y_2 = np.array(y[160:])
+y_pred_aux_age_1 = np.array(y_pred_aux_age[:160])
+y_pred_aux_age_2 = np.array(y_pred_aux_age[160:]) #309
+
+y_1 = np.array(y[:160])
+y_2 = np.array(y[160:])
