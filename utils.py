@@ -13,7 +13,7 @@ from sklearn.model_selection import cross_validate
 from tqdm import tqdm
 from torch_geometric.loader import DataLoader
 from sklearn.metrics import roc_curve, auc
-from neurocombat_sklearn import CombatModel
+#from neurocombat_sklearn import CombatModel
 
 np.random.seed(42)
 
