@@ -149,7 +149,7 @@ def corr_net(temporal_series):
 
 J = 1     # J
 n = 250    # Lattice size
-iterations = ((n*n)*n)*30    # Iterations to thermal equilibrium
+iterations = ((n*n)*n)    # Iterations to thermal equilibrium
 
 # Temperatures
 T_1 = np.linspace(1.7,2.21,750)
@@ -160,7 +160,7 @@ Temps = np.hstack((T_1,T_2)).ravel()
 # Simulating the models
 config = initial_state(n,"random")
 
-X = Matrix_X(Temps, config,iterations,J,n,17, adj_size=190) # 17, 333
+X = Matrix_X(Temps, config,iterations,J,n,13, adj_size=333) # 17, 333
 
 # Save the simulated models
 np.savetxt('simulation_corr_matrix_190__250-17.txt', X.ravel())
