@@ -1,11 +1,15 @@
-import utils as ut
+import sys
+import os
+sys.path.append(os.path.abspath(os.getcwd()))
+
+import scr.utils as ut
 import pandas as pd
 import numpy as np
 import torch.nn as nn
 from tqdm import tqdm
 from sklearn.metrics import mean_absolute_error,mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
-from model import GCN
+from model.model import GCN
 import torch
 
 def TRAIN_LOSS(loader):

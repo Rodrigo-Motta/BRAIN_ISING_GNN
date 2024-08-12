@@ -5,14 +5,9 @@ import statsmodels.api as sm
 from sklearn.metrics import r2_score, mean_absolute_error
 import seaborn as sns
 
-# load_pred = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_333_TRUE.txt')
-# load_test = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_333_TRUE.txt')
-#
-# load_pred = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_333.txt')
-# load_test = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_333.txt')
+load_pred = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_333_TRUE.txt')
+load_test = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_333_TRUE.txt')
 
-load_pred = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_190_mae.txt')
-load_test = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_190_mae.txt')
 
 # Fit a regression model
 X = sm.add_constant(load_test)  # Adds a constant term to the predictor
@@ -29,26 +24,26 @@ from statsmodels.sandbox.regression.predstd import wls_prediction_std
 prstd, iv_l, iv_u = wls_prediction_std(results, exog=x_pred2, alpha=0.1)  # 95% confidence interval
 
 
-# plt.figure(figsize=(8, 4), dpi=120)
-#
-# #Add regression line and confidence interval
-# plt.plot(x_pred, y_pred, '-', color='black')  # Reg line
-# #plt.fill_between(x_pred, iv_l, iv_u, color='grey', alpha=0.05)  # Confidence interval
-#
-# # Create the scatter plot
-# scatter = plt.scatter(load_test, load_pred, c=load_test, cmap='viridis', alpha=0.5, s=100)
-# cbar = plt.colorbar(scatter)
-# cbar.set_label('Ising Temperature')
-#
-# # Plot settings
-# plt.title(f'r2 = {r2_score(load_test, load_pred):.2f}')
-# plt.ylabel(r'$\hat{T}$')
-# plt.xlabel(r'$T$')
-# plt.xlim(1.8, 2.4)
-# plt.ylim(1.8, 2.4)
-# plt.grid()
-#
-# plt.show()
+plt.figure(figsize=(8, 4), dpi=120)
+
+#Add regression line and confidence interval
+plt.plot(x_pred, y_pred, '-', color='black')  # Reg line
+#plt.fill_between(x_pred, iv_l, iv_u, color='grey', alpha=0.05)  # Confidence interval
+
+# Create the scatter plot
+scatter = plt.scatter(load_test, load_pred, c=load_test, cmap='viridis', alpha=0.5, s=100)
+cbar = plt.colorbar(scatter)
+cbar.set_label('Ising Temperature')
+
+# Plot settings
+plt.title(f'r2 = {r2_score(load_test, load_pred):.2f}')
+plt.ylabel(r'$\hat{T}$')
+plt.xlabel(r'$T$')
+plt.xlim(1.8, 2.4)
+plt.ylim(1.8, 2.4)
+plt.grid()
+
+plt.show()
 
 #####################################################################
 
