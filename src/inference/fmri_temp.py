@@ -1,7 +1,7 @@
 import pandas as pd
 import utils as ut
 import numpy as np
-from scr.model.model import GCN
+from src.model.model import GCN
 
 import torch
 from scipy import stats
