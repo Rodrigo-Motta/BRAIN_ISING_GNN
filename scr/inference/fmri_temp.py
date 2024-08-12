@@ -1,9 +1,5 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.getcwd()))
-
 import pandas as pd
-import scr.utils as ut
+import utils as ut
 import numpy as np
 from scr.model.model import GCN
 

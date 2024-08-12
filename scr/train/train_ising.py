@@ -1,8 +1,4 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.getcwd()))
-
-import scr.utils as ut
+import utils as ut
 import pandas as pd
 import numpy as np
 import torch.nn as nn

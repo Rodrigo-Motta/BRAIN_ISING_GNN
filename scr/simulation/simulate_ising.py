@@ -1,10 +1,8 @@
 from numba import jit,prange
 import pandas as pd
 import numpy as np
-import sys
-import os
-sys.path.append(os.path.abspath(os.getcwd()))
-from scr.utils import remove_triangle
+
+from utils import remove_triangle
 
 # Random initial state
 def initial_state(L,string):
