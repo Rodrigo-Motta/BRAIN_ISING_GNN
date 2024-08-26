@@ -36,7 +36,7 @@ This project uses Graph Neural Networks (GNNs) to analyze brain critical states 
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/username/brain-ising-gnn.git
+    git clone https://github.com/rodrigo-motta/brain-ising-gnn.git
     cd brain-ising-gnn
     ```
 
