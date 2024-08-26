@@ -52,7 +52,7 @@ The dataset used in this project is derived from the ADHD-200 Preprocessed repos
 ### Data Access
 
 - Download the dataset from [here](http://fcon_1000.projects.nitrc.org/indi/adhd200/).
-- Ensure that the dataset is placed in the `data/` directory.
+- The ADHD 4D is parcellated using 333 ROIs Gordon's Cortical Parcellation. This not available in the NITRC website, thus, if needed feel free to ask me.
 
 ## Usage
 
