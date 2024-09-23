@@ -1,5 +1,5 @@
 import pandas as pd
-import utils as ut
+import src.utils as ut
 import numpy as np
 from src.model.model import GCN
 

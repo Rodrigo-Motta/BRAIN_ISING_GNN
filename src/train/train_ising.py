@@ -1,4 +1,4 @@
-import utils as ut
+import src.utils as ut
 import pandas as pd
 import numpy as np
 import torch.nn as nn

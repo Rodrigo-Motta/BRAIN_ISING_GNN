@@ -2,7 +2,7 @@ from numba import jit,prange
 import pandas as pd
 import numpy as np
 
-from utils import remove_triangle
+from src.utils import remove_triangle
 
 # Random initial state
 def initial_state(L,string):
