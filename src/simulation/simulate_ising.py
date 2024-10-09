@@ -2,7 +2,7 @@ from numba import jit,prange
 import pandas as pd
 import numpy as np
 
-from src.utils import remove_triangle
+from utils import remove_triangle
 
 # Random initial state
 def initial_state(L,string):
@@ -86,21 +86,30 @@ def Matrix_X(Temps, config, iterations, J, n, block_size, adj_size):
         print('Models ', t + 1, end="\r", flush=True)
 
         # Simulating the dynamical model
-        model = temporalseries(Temps[t], config, iterations, n * n, fluctuations, J, n)
+        model = temporalseries(Temps[t], config, iterations, 10*(n * n), fluctuations, J, n)
         # Spatial Average
         avg_model = average_blocks(model, block_size)
         # Transforming into DataFrame
         avg_model_df = pd.DataFrame(avg_model.reshape(fluctuations, avg_model.shape[1] * avg_model.shape[1]))
         # Correlation matrix
         corr_matrix = (pd.DataFrame(avg_model_df).corr())
-        # Removing the excess
-        corr_matrix = corr_matrix.iloc[int((corr_size - adj_size)/2) : -int((corr_size - adj_size)/2),
-                      int((corr_size - adj_size)/2) : - int((corr_size - adj_size)/2)]
+        
+        # Check if (n//block_size is even)
+        if (n//block_size)%2 == 0:
+            # Removing the excess
+            corr_matrix = corr_matrix.iloc[int((corr_size - adj_size)/2) + 1 : -int((corr_size - adj_size)/2),
+                        int((corr_size - adj_size)/2) + 1 : - int((corr_size - adj_size)/2)]
+        else:
+            # Removing the excess
+            corr_matrix = corr_matrix.iloc[int((corr_size - adj_size)/2): -int((corr_size - adj_size)/2),
+                        int((corr_size - adj_size)/2) : - int((corr_size - adj_size)/2)]
+        
         # Removing the lower triangle
         corr_matrix = remove_triangle(corr_matrix)
+    
 
         # Storing the correlations
-        X[t, :] = corr_matrix.reshape(1, int((adj_size*adj_size - adj_size)/2))
+        X[t, :] = corr_matrix
 
     return X
 
@@ -159,9 +168,9 @@ Temps = np.hstack((T_1,T_2)).ravel()
 
 
 # Simulating the models
-config = initial_state(n,"random")
+config = initial_state(n,"aligned")
 
-X = Matrix_X(Temps, config,iterations,J,n,13, adj_size=333) # 17, 333
+X = Matrix_X(Temps, config, iterations ,J ,n ,13, adj_size=333) # 17, 333
 
 # Save the simulated models
 np.savetxt('simulation_corr_matrix_190__250-17.txt', X.ravel())

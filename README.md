@@ -56,12 +56,18 @@ The dataset used in this project is derived from the ADHD-200 Preprocessed repos
 
 ## Usage
 
+### Set src as working env.
+
+```bash
+cd src
+ ```
+
 ### Running Simulations
 
 To generate Ising Model networks used for training:
 
 ```bash
-python -m src.simulation.simulate_ising.py
+python -m simulation.simulate_ising.py
  ```
 
 
@@ -70,7 +76,7 @@ python -m src.simulation.simulate_ising.py
 To generate Ising Model networks used for training:
 
 ```bash
-python -m src.train.train_ising.py
+python -m train.train_ising.py
 ```
 
 
@@ -79,7 +85,7 @@ python -m src.train.train_ising.py
 To generate Ising Model networks used for training:
 
 ```bash
-python -m src.inference.fmri_temp.py
+python -m inference.fmri_temp.py
 ```
 
 ## Contributing

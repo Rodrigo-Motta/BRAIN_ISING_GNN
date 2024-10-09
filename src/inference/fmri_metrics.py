@@ -66,7 +66,7 @@ y = y.dropna()
 plt.figure(figsize=(10,5), dpi=120)
 sns.regplot(data=y, x='Age', y='y_pred',color='black')
 
-correlation_value = np.corrcoef([y['Age'].values, y['y_pred'].values])[0,1]
+correlation_value = stats.pearsonr([y['Age'].values, y['y_pred'].values]).statistic
 spearman = stats.spearmanr(y['Age'].values, y['y_pred'].values).statistic
 
 text = f'Pearson: {correlation_value:.2f}$^{{****}}$ \nSpearman: {spearman:.2f}$^{{****}}$'
