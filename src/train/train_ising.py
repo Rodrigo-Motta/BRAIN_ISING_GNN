@@ -17,9 +17,9 @@ num_simulations = 1500
 ######### Change to your data path #########
 
 # Simulation correlation matrix data path
-simulation_path = '/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/simulation_corr_matrix_190__250-17.txt'  
+simulation_path = '/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/simulation_corr_matrix_revision.txt'  
 # Simulation Temperature data path
-temp_path = '/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/temps_190__250-17.txt'
+temp_path = '/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/temps_revision.txt'
 
 loss = nn.L1Loss() #nn.MSELoss() #nn.L1Loss()
 
@@ -113,6 +113,10 @@ print('############ Start Training ############')
 X = np.loadtxt(simulation_path).ravel().reshape(num_simulations, int((N*N - N)/2))
 Temps = np.loadtxt(temp_path)
 
+# Filter low temperatures
+X = X[150:]
+Temps = Temps[150:]
+
 df = pd.concat([pd.DataFrame(X),pd.DataFrame(Temps)],axis=1).sample(frac=1)
 
 X_t = np.array(df.iloc[:150, :-1].values, dtype=np.float32)
@@ -175,13 +179,13 @@ for epoch in range(1, NUM_EPOCHS + 1):
 
 
 # Save the model parameters to a file
-torch.save(model.state_dict(), '../model_params_333_mae.pth')
+torch.save(model.state_dict(), '../model_params_revision_mae.pth')
 
 # Create a DataFrame from the dictionary
 df = pd.DataFrame(metrics)
 
 # Save the DataFrame to a CSV file
-df.to_csv('../model_eval_333_mae.csv', index=False)
+df.to_csv('../model_eval_revision_mae.csv', index=False)
 
 # Save predictions
 y_pred_aux = np.array([])
@@ -190,5 +194,5 @@ for y_i in test_loader:
     y_pred_aux = np.concatenate((y_pred_aux, (model(y_i))[1].detach().numpy().ravel()) )
     y_test_aux.append(y_i.y.numpy()[0])
 
-np.savetxt('../y_pred_ising_333_mae.txt', y_pred_aux.ravel())
-np.savetxt('../y_test_ising_333_mae.txt', np.array(y_test_aux).ravel())
+np.savetxt('../y_pred_ising_revision_mae.txt', y_pred_aux.ravel())
+np.savetxt('../y_test_ising_revision_mae.txt', np.array(y_test_aux).ravel())

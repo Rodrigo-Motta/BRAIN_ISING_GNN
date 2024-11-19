@@ -5,8 +5,8 @@ import statsmodels.api as sm
 from sklearn.metrics import r2_score, mean_absolute_error
 import seaborn as sns
 
-load_pred = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_333_TRUE.txt')
-load_test = np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_333_TRUE.txt')
+load_pred = np.loadtxt('/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/y_pred_ising_revision_mae.txt')#np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_pred_ising_333_TRUE.txt')
+load_test = np.loadtxt('/Users/rodrigo/Documents/Projects/BRAIN_ISING_GNN/y_test_ising_revision_mae.txt')#np.loadtxt('/Users/rodrigo/Post-Grad/Ising_GNN/Data/y_test_ising_333_TRUE.txt')
 
 
 # Fit a regression model
